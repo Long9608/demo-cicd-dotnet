@@ -1,4 +1,4 @@
-﻿name: .NET CI/CD Pipeline
+﻿name: CI/CD Pipeline Demo
 
 on:
   push:
@@ -7,12 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v3
-    
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -21,16 +22,21 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
       
-    - name: Build
+    - name: Build project
       run: dotnet build --no-restore --verbosity normal
       
-    - name: Test
+    - name: Run tests
       run: dotnet test --no-build --verbosity normal
       
-    - name: Deploy Simulation
+    - name: Deployment Simulation
       run: |
-        echo "🚀 CI/CD PIPELINE COMPLETED SUCCESSFULLY!"
-        echo "✅ Build: PASSED"
+        echo "========================================="
+        echo "🚀 CI/CD PIPELINE SUCCESSFUL!"
+        echo "========================================="
+        echo "✅ Build: COMPLETED"
         echo "✅ Tests: PASSED"
-        echo "✅ Deployment: READY"
+        echo "✅ Deployment: SIMULATED"
         echo "📅 Time: $(Get-Date)"
+        echo "🔧 Commit: ${{ github.sha }}"
+        echo "👤 By: ${{ github.actor }}"
+        echo "========================================="
