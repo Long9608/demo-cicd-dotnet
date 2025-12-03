@@ -7,13 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: windows-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
+    - uses: actions/checkout@v3
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -22,91 +21,16 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
       
-    - name: Build project
-      run: dotnet build --no-restore --configuration Release
+    - name: Build
+      run: dotnet build --no-restore --verbosity normal
       
-    - name: Run tests
+    - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Create deployment package
+    - name: Deploy Simulation
       run: |
-        dotnet publish DemoCICD.csproj -c Release -o ./publish --no-build
-        echo "✅ Package created!"
-        
-    - name: DEPLOYMENT SIMULATION
-      if: github.ref == 'refs/heads/main'
-      run: |
-        echo "=========================================="
-        echo "🚀 BẮT ĐẦU TRIỂN KHAI ỨNG DỤNG .NET"
-        echo "=========================================="
-        echo ""
-        echo "📊 THÔNG TIN DEPLOYMENT:"
-        echo "   • Ứng dụng: DemoCICD"
-        echo "   • Phiên bản: 1.0.0"
-        echo "   • Người deploy: ${{ github.actor }}"
-        echo "   • Thời gian: $(Get-Date -Format 'HH:mm:ss dd/MM/yyyy')"
-        echo "   • Commit: ${{ github.sha }}"
-        echo ""
-        echo "📦 QUY TRÌNH DEPLOYMENT:"
-        echo "   1. Kiểm tra code... ✅"
-        echo "   2. Build ứng dụng... ✅"
-        echo "   3. Chạy unit tests... ✅"
-        echo "   4. Đóng gói ứng dụng... ✅"
-        echo "   5. Upload lên server... ✅"
-        echo "   6. Khởi động dịch vụ... ✅"
-        echo ""
-        echo "✅ DEPLOYMENT HOÀN TẤT!"
-        echo "🌐 Truy cập: https://democicd.yourapp.com"
-        echo "📞 Health check: https://democicd.yourapp.com/health"
-        echo ""
-        echo "=========================================="
-        
-    - name: Create deployment report
-      run: |
-        $reportContent = @"
-        ==========================================
-        BÁO CÁO TRIỂN KHAI CI/CD - .NET
-        ==========================================
-        
-        THÔNG TIN CHUNG
-        • Dự án: DemoCICD
-        • Môi trường: Production
-        • Thời gian: $(Get-Date -Format 'HH:mm:ss dd/MM/yyyy')
-        • Trạng thái: THÀNH CÔNG ✅
-        
-        CHI TIẾT QUY TRÌNH
-        1. ✅ Checkout code từ GitHub
-        2. ✅ Setup .NET 6.0 SDK
-        3. ✅ Restore dependencies (NuGet packages)
-        4. ✅ Build ứng dụng
-        5. ✅ Chạy unit tests
-        6. ✅ Tạo deployment package
-        7. ✅ Deploy lên production server
-        
-        THÔNG TIN KỸ THUẬT
-        • Commit SHA: ${{ github.sha }}
-        • Branch: ${{ github.ref }}
-        • Trigger by: ${{ github.actor }}
-        • Runner: windows-latest
-        • .NET Version: 6.0
-        
-        ARTIFACTS ĐÃ TẠO
-        • DemoCICD.dll
-        • DemoCICD.exe
-        • Các file phụ thuộc
-        
-        ==========================================
-        *Tự động tạo bởi GitHub Actions*
-        ==========================================
-        "@
-        
-        Set-Content -Path "deployment-report.txt" -Value $reportContent
-        echo "📄 Đã tạo file báo cáo: deployment-report.txt"
-        
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dotnet-app
-        path: |
-          ./publish/
-          deployment-report.txt
+        echo "🚀 CI/CD PIPELINE COMPLETED SUCCESSFULLY!"
+        echo "✅ Build: PASSED"
+        echo "✅ Tests: PASSED"
+        echo "✅ Deployment: READY"
+        echo "📅 Time: $(Get-Date)"
