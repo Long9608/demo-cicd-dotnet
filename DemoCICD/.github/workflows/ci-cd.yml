@@ -40,3 +40,5 @@ jobs:
         echo "🔧 Commit: ${{ github.sha }}"
         echo "👤 By: ${{ github.actor }}"
         echo "========================================="
+        # Thêm dòng này ở cuối file (sau dòng cuối cùng)
+# Trigger: $(date)
