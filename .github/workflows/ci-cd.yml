@@ -1,38 +1,26 @@
-﻿name: CI/CD Pipeline
+﻿name: CI/CD Demo
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: windows-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
+    - uses: actions/checkout@v3
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: "6.0.x"
+        dotnet-version: '6.0.x'
         
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Build
+      run: dotnet build
       
-    - name: Build project
-      run: dotnet build --no-restore --verbosity normal
+    - name: Test
+      run: dotnet test
       
-    - name: Run tests
-      run: dotnet test --no-build --verbosity normal
-      
-    - name: CI/CD Success
-      run: |
-        echo "========================================"
-        echo "✅ CI/CD PIPELINE COMPLETED SUCCESSFULLY"
-        echo "========================================"
-        echo "Build: PASSED"
-        echo "Tests: PASSED"
-        echo "Status: READY FOR DEPLOYMENT"
+    - name: Success
+      run: echo "✅ CI/CD WORKED!"
